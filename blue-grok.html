@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صفحه ورود</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.5/Vazirmatn-font-face.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, rgb(4, 89, 122), rgb(0, 0, 0));
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            direction: rtl;
+            overflow-x: hidden;
+        }
+
+        .login-container {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(26, 26, 46, 0.6));
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            backdrop-filter: blur(20px);
+            animation: fadeInUp 0.8s ease-out;
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.1) 50%, transparent 70%);
+            animation: headerGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes headerGlow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff, #00d4ff, #0099cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: rgba(0, 212, 255, 0.4);
+            background: rgba(0, 212, 255, 0.08);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.15);
+        }
+
+        .form-group i {
+            /*position: absolute;*/
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00d4ff;
+            font-size: 1.2rem;
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .login-button:hover::before {
+            left: 100%;
+        }
+
+        .login-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.5);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .forgot-password a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 767.98px) {
+            .login-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .login-title {
+                font-size: 2rem;
+            }
+
+            .form-group input {
+                padding: 0.8rem 1.2rem;
+                font-size: 1rem;
+            }
+
+            .login-button {
+                padding: 0.8rem;
+                font-size: 1.1rem;
+            }
+
+            .forgot-password a {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .login-container {
+                padding: 1.5rem;
+                margin: 0.8rem;
+            }
+
+            .login-title {
+                font-size: 1.8rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group input {
+                padding: 0.7rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            .form-group i {
+                right: 1rem;
+                font-size: 1rem;
+            }
+
+            .login-button {
+                padding: 0.7rem;
+                font-size: 1rem;
+            }
+
+            .forgot-password {
+                margin-top: 1rem;
+            }
+
+            .forgot-password a {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .login-container {
+                padding: 1.2rem;
+                margin: 0.5rem;
+            }
+
+            .login-title {
+                font-size: 1.6rem;
+            }
+
+            .form-group input {
+                padding: 0.6rem 0.9rem;
+                font-size: 0.9rem;
+            }
+
+            .form-group i {
+                right: 0.9rem;
+                font-size: 0.9rem;
+            }
+
+            .login-button {
+                padding: 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            .forgot-password a {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0099cc, #00d4ff);
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .login-container {
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: none;
+            }
+
+            .login-title {
+                color: #333;
+                -webkit-text-fill-color: #333;
+                text-shadow: none;
+            }
+
+            .form-group input {
+                background: #f9f9f9;
+                border: 1px solid #ccc;
+                color: #333;
+            }
+
+            .form-group i {
+                color: #666;
+            }
+
+            .login-button {
+                background: #666;
+                color: #fff;
+                box-shadow: none;
+            }
+
+            .forgot-password a {
+                color: #666;
+                text-shadow: none;
+            }
+
+            .login-container::before {
+                display: none;
+            }
+
+            .login-button::before {
+                display: none;
+            }
+
+            .login-container, .login-button, .form-group input {
+                animation: none;
+                transform: none;
+                transition: none;
+            }
+
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h1 class="login-title">ورود به سیستم</h1>
+    <form class="login-form">
+        <div class="form-group">
+            <input type="text" class="firstfield" placeholder="نام کاربری یا ایمیل" required>
+            <i class="material-icons">person</i>
+        </div>
+        <div class="form-group">
+            <input type="password" class="secondfield" placeholder="رمز عبور" required>
+            <i class="material-icons">lock</i>
+        </div>
+        <button type="submit" class="login-button">ورود</button>
+    </form>
+    <div class="forgot-password">
+        <a href="#">رمز عبور خود را فراموش کرده‌اید؟</a>
+    </div>
+</div>
+</body>
+</html>

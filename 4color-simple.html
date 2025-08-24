@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ورود / ثبت‌نام</title>
+
+    <!-- فونت فارسی؛ در صورت آفلاین بودن حذفش کن -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ------------------------------ ریست و تنظیمات پایه ------------------------------ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            /* فونت فارسی خوانا */
+            font-family: 'Vazirmatn', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+
+            /* حداقل ارتفاع برای پر کردن صفحه */
+
+
+            /* پس‌زمینه گرادیانی پویا و یکپارچه */
+            background: linear-gradient(135deg, #6d28d9, #0ea5e9, #10b981, #f59e0b);
+            background-size: 300% 300%;
+            animation: bgShift 20s ease infinite ;
+
+            /* مرکزسازی هوشمند کارت */
+            display: grid;
+            place-items: center;
+
+            /*!* اگر محتوا قدش زیاد شد اسکرول عمودی فعال باشد *!*/
+            /*overflow-y: auto;*/
+            /*overflow-x: hidden;*/
+
+            /* فاصلهٔ تنفسی برای موبایل */
+            padding: 24px;
+        }
+        @keyframes bgShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ------------------------------ ظرف (Wrapper) برای لایهٔ افکت نور نقطه‌ای ------------------------------ */
+        .scene {
+            position: relative;
+            width: min(960px, 100%);
+            display: grid;
+            place-items: center;
+        }
+        /* افکت ذرات نور ملایم روی پس‌زمینه؛ زیر کارت قرار می‌گیرد */
+        .dots {
+            position: absolute;
+            inset: -40vmax;             /* بزرگ‌تر از صفحه برای پوشش کامل */
+            background:
+                    radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 40%),
+                    radial-gradient(circle at 80% 20%, rgba(255,255,255,.06), transparent 45%),
+                    radial-gradient(circle at 60% 80%, rgba(255,255,255,.07), transparent 45%);
+            filter: blur(2px);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatDots 30s ease-in-out infinite alternate;
+        }
+        @keyframes floatDots {
+            from { transform: translateY(-10px) rotate(0deg); }
+            to   { transform: translateY(10px)  rotate(2deg); }
+        }
+
+        /* ------------------------------ کارت احراز هویت ------------------------------ */
+        .auth-card {
+            position: relative;
+            z-index: 1; /* بالای افکت‌ها */
+            width: min(480px, 100%);    /* محدودیت عرض + ریسپانسیو */
+            border-radius: 24px;
+            padding: 28px;
+            background: rgba(255,255,255, .16);    /* شیشه‌ای */
+            border: 1px solid rgba(255,255,255, .25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow:
+                    0 12px 24px rgba(0,0,0,.12),
+                    inset 0 1px 0 rgba(255,255,255,.25);
+        }
+
+        /* عنوان بالای کارت */
+        .brand {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-shadow: 0 2px 6px rgba(0,0,0,.25);
+        }
+
+        /* تب‌های ورود و ثبت‌نام */
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(255,255,255,.14);
+            border: 1px solid rgba(255,255,255,.25);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+        }
+        .tab-btn {
+            appearance: none;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: .98rem;
+            font-weight: 600;
+            color: #1f2937;
+            background: rgba(255,255,255,.9);
+            cursor: pointer;
+            transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+        }
+        .tab-btn[aria-selected="true"] {
+            /* تب فعال کمی برجسته‌تر */
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(0,0,0,.12);
+            transform: translateY(-1px);
+        }
+
+        /* ظرف فرم‌ها */
+        .panes { position: relative; }
+        .pane {
+            display: none; /* فقط پنل فعال نشان داده می‌شود */
+            animation: fadeIn .25s ease;
+        }
+        .pane.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ------------------------------ کنترل‌ها و ورودی‌ها ------------------------------ */
+        .field {
+            display: grid;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+        .label {
+            font-size: .9rem;
+            color: #111827;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .control {
+            position: relative;
+        }
+        .input {
+            width: 100%;
+            padding: 12px 44px 12px 12px; /* جا برای آیکن راست */
+            border-radius: 12px;
+            border: 1px solid rgba(17,24,39,.15);
+            outline: none;
+            background: rgba(255,255,255,.96);
+            font-size: .98rem;
+            transition: border-color .15s ease, box-shadow .15s ease, transform .06s ease;
+        }
+        .input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59,130,246,.2);
+        }
+        /* آیکن SVG سمت راست ورودی */
+        .icon {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            opacity: .7;
+            pointer-events: none;
+        }
+
+        /* دکمه نشان/پنهان کردن رمز */
+        .toggle-pass {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            font-size: .95rem;
+            color: #374151;
+            padding: 4px 6px;
+        }
+
+        /* چک‌باکس و ردیف‌های کمکی */
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 8px 0 16px;
+            flex-wrap: wrap;  /* برای موبایل */
+        }
+        .helper {
+            font-size: .9rem;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .helper a {
+            color: #0ea5e9;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .helper a:hover { text-decoration: underline; }
+
+        /* دکمهٔ اصلی */
+        .btn {
+            width: 100%;
+            border: 0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            cursor: pointer;
+            box-shadow: 0 10px 18px rgba(124,58,237,.28);
+            transition: transform .08s ease, filter .12s ease, box-shadow .12s ease;
+        }
+        .btn:hover { filter: brightness(1.05); }
+        .btn:active { transform: translateY(1px); }
+
+        /* جداکنندهٔ اجتماعی */
+        .divider {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center; gap: 8px;
+            color: #111827;
+            margin: 16px 0;
+            font-size: .9rem;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            height: 1px;
+            background: rgba(17,24,39,.2);
+        }
+
+        /* دکمه‌های اجتماعی نمایشی (اختیاری) */
+        .socials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .soc-btn {
+            border: 1px solid rgba(17,24,39,.15);
+            background: rgba(255,255,255,.9);
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* فوتر کوتاه زیر فرم‌ها */
+        .mini {
+            margin-top: 12px;
+            font-size: .88rem;
+            color: #111827;
+            text-align: center;
+        }
+
+        /* ------------------------------ واکنش‌گرایی ------------------------------ */
+        @media (max-width: 520px) {
+            .auth-card { padding: 22px; border-radius: 20px; }
+            .tab-btn { padding: 9px 10px; font-size: .96rem; }
+            .input { padding: 11px 42px 11px 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ظرف صحنه برای کنترل لایه‌ها و افکت‌ها -->
+<div class="scene">
+    <div class="dots" aria-hidden="true"></div>
+
+    <!-- کارت احراز هویت (ورود/ثبت‌نام) -->
+    <section class="auth-card" aria-label="فرم ورود و ثبت‌نام">
+        <div class="brand">حساب کاربری</div>
+
+        <!-- تب‌های ورود / ثبت‌نام -->
+        <div class="tabs" role="tablist" aria-label="انتخاب حالت">
+            <button class="tab-btn" role="tab" id="tab-login" aria-controls="pane-login" aria-selected="true">ورود</button>
+            <button class="tab-btn" role="tab" id="tab-signup" aria-controls="pane-signup" aria-selected="false">ثبت‌نام</button>
+        </div>
+
+        <!-- محتوای تب‌ها -->
+        <div class="panes">
+            <!-- پنل ورود -->
+            <form class="pane active" id="pane-login" role="tabpanel" aria-labelledby="tab-login" novalidate>
+                <!-- ایمیل/نام کاربری -->
+                <div class="field">
+                    <label class="label" for="login-username">ایمیل یا نام کاربری</label>
+                    <div class="control">
+                        <input class="input" id="login-username" name="username" type="email" inputmode="email" placeholder="example@email.com" required>
+                        <!-- آیکن ایمیل (SVG سبک و محلی) -->
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- رمز عبور -->
+                <div class="field">
+                    <label class="label" for="login-pass">رمز عبور</label>
+                    <div class="control">
+                        <input class="input" id="login-pass" name="password" type="password" placeholder="••••••••" required minlength="6">
+                        <button type="button" class="toggle-pass" data-target="login-pass" aria-label="نمایش/پنهان کردن رمز">👁️</button>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- ردیف کمکی -->
+                <div class="row">
+                    <label class="helper">
+                        <input type="checkbox" id="remember" />
+                        مرا به خاطر بسپار
+                    </label>
+                    <a class="helper" href="#">فراموشی رمز؟</a>
+                </div>
+
+                <button class="btn" type="submit">ورود</button>
+
+                <div class="divider">یا</div>
+
+                <div class="socials">
+                    <button type="button" class="soc-btn">Google</button>
+                    <button type="button" class="soc-btn">Apple</button>
+                    <button type="button" class="soc-btn">GitHub</button>
+                </div>
+
+                <p class="mini">حساب نداری؟ روی تب «ثبت‌نام» بالای کارت بزن.</p>
+            </form>
+
+            <!-- پنل ثبت‌نام -->
+            <form class="pane" id="pane-signup" role="tabpanel" aria-labelledby="tab-signup" novalidate>
+                <!-- نام و نام خانوادگی -->
+                <div class="field">
+                    <label class="label" for="su-name">نام و نام خانوادگی</label>
+                    <div class="control">
+                        <input class="input" id="su-name" name="name" type="text" placeholder="نام کامل شما" required>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 3-9 6v1h18v-1c0-3-4-6-9-6Z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- ایمیل -->
+                <div class="field">
+                    <label class="label" for="su-email">ایمیل</label>
+                    <div class="control">
+                        <input class="input" id="su-email" name="email" type="email" inputmode="email" placeholder="you@mail.com" required>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <path d="M4 6h16v12H4z"/><path d="m4 7 8 6 8-6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- رمز عبور -->
+                <div class="field">
+                    <label class="label" for="su-pass">رمز عبور</label>
+                    <div class="control">
+                        <input class="input" id="su-pass" name="password" type="password" placeholder="حداقل ۶ کاراکتر" required minlength="6">
+                        <button type="button" class="toggle-pass" data-target="su-pass" aria-label="نمایش/پنهان کردن رمز">👁️</button>
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- پذیرش قوانین -->
+                <div class="row">
+                    <label class="helper">
+                        <input type="checkbox" id="terms" required />
+                        قوانین و <a href="#">حریم‌خصوصی</a> را می‌پذیرم
+                    </label>
+                </div>
+
+                <button class="btn" type="submit">ایجاد حساب</button>
+
+                <p class="mini">حساب داری؟ روی تب «ورود» بالا بزن.</p>
+            </form>
+        </div>
+    </section>
+</div>
+
+<script>
+    // ------------------------------ جاوااسکریپت سبک برای تب‌ها و نمایش رمز ------------------------------
+
+    // تب‌ها: سوییچ بین ورود و ثبت‌نام بدون رفرش صفحه
+    const tabLogin  = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    const paneLogin = document.getElementById('pane-login');
+    const paneSignup= document.getElementById('pane-signup');
+
+    function activate(tab) {
+        const isLogin = tab === 'login';
+
+        // وضعیت انتخاب تب‌ها (برای دسترس‌پذیری aria-selected)
+        tabLogin.setAttribute('aria-selected', isLogin ? 'true' : 'false');
+        tabSignup.setAttribute('aria-selected', !isLogin ? 'true' : 'false');
+
+        // نمایش پنل مربوطه
+        paneLogin.classList.toggle('active', isLogin);
+        paneSignup.classList.toggle('active', !isLogin);
+    }
+
+    tabLogin.addEventListener('click', () => activate('login'));
+    tabSignup.addEventListener('click', () => activate('signup'));
+
+    // نمایش/پنهان کردن رمز عبور
+    document.querySelectorAll('.toggle-pass').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-target');
+            const input = document.getElementById(id);
+            const isPass = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPass ? 'text' : 'password');
+            btn.textContent = isPass ? '🙈' : '👁️';
+        });
+    });
+
+    // جلوگیری از رفتار پیش‌فرض ارسال فرم (نمایشی)
+    document.querySelectorAll('form').forEach(f => {
+        f.addEventListener('submit', e => {
+            e.preventDefault();
+            alert('ارسال نمایشی است. اینجا به API بک‌اند متصل شو 🌐');
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ورود — نسخه دسکتاپ</title>
+    <style>
+        /* ---------- تنظیمات پایه ---------- */
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+            min-height:100vh;
+            display:flex;align-items:center;justify-content:center;
+            padding:32px;
+            /* پس‌زمینهٔ دسکتاپ: انیمیشن کند و پرجزئیات */
+            background: linear-gradient(120deg,#0ea5e9,#7c3aed,#f97316);
+            background-size: 400% 400%;
+            animation: bgDesktop 22s ease infinite;
+            -webkit-font-smoothing:antialiased;
+        }
+        @keyframes bgDesktop{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        /* ---------- کارت ---------- */
+        .card{
+            width:980px; max-width:98%;
+            display:grid; grid-template-columns:1fr 420px; gap:28px;
+            background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);
+            border-radius:18px;padding:28px;border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 18px 50px rgba(2,6,23,0.45); color:#fff;
+        }
+
+        /* ---------- فرم و هدر ---------- */
+        .form-side{padding:18px 12px; display:flex; flex-direction:column; justify-content:center;}
+        .brand-row{display:flex; align-items:center; gap:10px; margin-bottom:10px; justify-content:flex-start}
+        .brand-title{font-weight:800;font-size:1.35rem}
+        .insta-logo{width:28px;height:28px;border-radius:6px;object-fit:contain;opacity:.95}
+
+        .tabs{display:flex;gap:10px;margin-bottom:14px}
+        .tab{flex:1;padding:10px;border-radius:10px;background:#fff;color:#0f172a;font-weight:700;cursor:pointer;border:0}
+        .tab[aria-selected="false"]{opacity:.85}
+
+        .field{margin-bottom:12px}
+        label{display:block;color:rgba(255,255,255,0.92);margin-bottom:6px;font-weight:600}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:#fff;font-size:1rem}
+
+        .row{display:flex;gap:12px;align-items:center;margin:12px 0;flex-wrap:wrap}
+        .btn{width:100%;padding:12px;border-radius:12px;border:0;color:#fff;font-weight:800;background:linear-gradient(90deg,#0ea5e9,#7c3aed);cursor:pointer;box-shadow:0 10px 24px rgba(124,58,237,0.22)}
+        .social-row{display:flex;gap:10px;margin-top:10px}
+        .google-btn{flex:1;padding:10px;border-radius:10px;background:#fff;color:#111;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;justify-content:center}
+        .phone-btn{flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,0.14);color:#fff;border:1px solid rgba(255,255,255,0.12);cursor:pointer}
+
+        /* ---------- بخش تصویر/اطلاعات ---------- */
+        .visual{padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:12px;border:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+        .visual img{width:100%;height:auto;border-radius:10px;box-shadow:0 12px 26px rgba(2,6,23,0.45)}
+        .small{color:rgba(255,255,255,0.9);text-align:center}
+
+        /* چک باکس ربات نیستم */
+        .captcha{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,0.9);font-weight:600}
+
+        /* واکنش‌پذیری */
+        @media (max-width:1100px){ .card{grid-template-columns:1fr 360px} }
+        @media (max-width:880px){
+            .card{grid-template-columns:1fr;max-width:720px}
+            .visual{order:2}
+        }
+        @media (max-width:520px){
+            body{padding:18px}
+            .card{padding:18px;border-radius:14px}
+        }
+    </style>
+</head>
+<body>
+<!-- توجه: اگر خواستی لوگوی اینستاگرام را تغییر دهی، فقط لینک تصویر زیر را عوض کن -->
+<div style="display:none" id="CONFIG">
+    <!-- مقدار پیش‌فرض لوگوی اینستاگرام، می‌توانی لینک دلخواهت را اینجا بگذاری -->
+    <span id="INSTAGRAM_LOGO">https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png</span>
+    <!-- آدرس بازگشت OAuth گوگل (سرور) را در پروژهٔ اصلی خودت قرار بده -->
+    <span id="GOOGLE_OAUTH_URL">/auth/google</span>
+</div>
+
+<main class="card" role="main" aria-label="ورود دسکتاپ">
+    <section class="form-side" aria-labelledby="title">
+        <div class="brand-row">
+            <img id="instaLogo" class="insta-logo" src="" alt="logo">
+            <div class="brand-title">ورود به حساب کاربری</div>
+        </div>
+
+        <div class="tabs" role="tablist">
+            <button class="tab" id="t1" aria-selected="true">ورود</button>
+            <button class="tab" id="t2" aria-selected="false">ثبت‌نام</button>
+        </div>
+
+        <!-- پنل ورود -->
+        <div id="pane-login">
+            <div class="field"><label for="d-email">ایمیل</label><input id="d-email" type="email" placeholder="you@example.com"></div>
+            <div class="field"><label for="d-pass">رمز عبور</label><input id="d-pass" type="password" placeholder="••••••••"></div>
+
+            <div class="row">
+                <label class="captcha"><input id="cb-human" type="checkbox"> من ربات نیستم</label>
+            </div>
+
+            <button id="loginBtn" class="btn">ورود</button>
+
+            <div class="divider" style="height:12px"></div>
+
+            <div class="social-row">
+                <!-- دکمهٔ Google (نمایشی) -->
+                <button id="googleLogin" class="google-btn" title="ورود با گوگل">
+                    <!-- آیکون گوگل ساده -->
+                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 10.5c3.6 0 6.7 1.3 9.1 3.5l6.8-6.8C35.8 4 30.6 2 24 2 14.4 2 6.2 7.9 3.1 16.9l7.9 6.2C12.1 18 17.6 10.5 24 10.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.5-.1-3-.3-4.4H24v8.4h12.6c-.5 2.6-2 4.6-4.3 6.1l6.8 5.3c3.9-3.6 6.4-8.9 6.4-15.4z"/><path fill="#FBBC05" d="M10.1 28.2A14.6 14.6 0 0 1 9 24c0-1.3.2-2.6.5-3.8L1.5 13C.5 15.6 0 18.7 0 22c0 3.1.5 6 1.5 8.8l8.6-2.6z"/><path fill="#34A853" d="M24 46c6.6 0 12.2-2.2 16.3-6.1l-7.8-6.1C30.6 34.5 27 35.5 24 35.5c-7.2 0-13.3-4.8-15.4-11.4L1.5 29C4.6 37 12.8 46 24 46z"/></svg>
+                    ورود با گوگل
+                </button>
+
+                <!-- دکمه ورود با شماره تلفن: هدایت به صفحه phone.html -->
+                <a href="phone2.html" class="phone-btn" style="display:inline-flex;align-items:center;justify-content:center">ورود با شماره تلفن</a>
+            </div>
+
+            <p style="margin-top:10px;color:rgba(255,255,255,0.82)">یا از دکمه‌های بالا استفاده کن.</p>
+        </div>
+
+        <!-- پنل ثبت‌نام (نمونه) -->
+        <div id="pane-signup" style="display:none">
+            <div class="field"><label for="d-name">نام کامل</label><input id="d-name" type="text" placeholder="نام شما"></div>
+            <div class="field"><label for="d-email2">ایمیل</label><input id="d-email2" type="email" placeholder="you@example.com"></div>
+            <div class="field"><label for="d-pass2">رمز عبور</label><input id="d-pass2" type="password" placeholder="رمز امن"></div>
+
+            <div class="row">
+                <label class="captcha"><input id="cb-human-sign" type="checkbox"> من ربات نیستم</label>
+            </div>
+
+            <button id="signupBtn" class="btn">ثبت‌نام</button>
+        </div>
+    </section>
+
+    <aside class="visual" aria-hidden="false">
+        <img src="https://i.postimg.cc/MKbS6f5G/14040331-0160478.jpg" alt="تصویر نمایشی">
+        <div class="small">نسخهٔ دسکتاپ — انیمیشن پس‌زمینه آرام و پرجزئیات</div>
+    </aside>
+</main>
+
+<script>
+    // ---------- مقداردهی لوگو و آدرس OAuth از CONFIG ----------
+    const INST_LOGO = document.getElementById('INSTAGRAM_LOGO').textContent || 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png';
+    document.getElementById('instaLogo').src = INST_LOGO;
+
+    // اگر می‌خواهی گوگل واقعی متصل شود:
+    // ۱) سرور بک‌اند داشته باش که endpoint ای بسازد مثل: /auth/google -> redirect to Google OAuth
+    // ۲) در اینجا window.location = '/auth/google' را مقدار دهی کن.
+    const googleOAuth = document.getElementById('GOOGLE_OAUTH_URL') ? document.getElementById('GOOGLE_OAUTH_URL').textContent : '/auth/google';
+
+    document.getElementById('googleLogin').addEventListener('click', ()=> {
+        // نمونهٔ نمایشی: اگر بک‌اند نداری، یک alert نمایش می‌دهیم.
+        // برای پیاده‌سازی واقعی: window.location = googleOAuth;
+        alert('برای اتصال واقعی به گوگل، این دکمه باید به endpoint بک‌اند شما (مثلاً /auth/google) هدایت شود.');
+    });
+
+    // ---------- تب‌ها ----------
+    const t1 = document.getElementById('t1'), t2 = document.getElementById('t2');
+    const pLogin = document.getElementById('pane-login'), pSignup = document.getElementById('pane-signup');
+    t1.addEventListener('click', ()=>{ t1.setAttribute('aria-selected','true'); t2.setAttribute('aria-selected','false'); pLogin.style.display='block'; pSignup.style.display='none' });
+    t2.addEventListener('click', ()=>{ t2.setAttribute('aria-selected','true'); t1.setAttribute('aria-selected','false'); pSignup.style.display='block'; pLogin.style.display='none' });
+
+    // ---------- اعتبارسنجی ربات نیستم و ارسال فرم (نمونه) ----------
+    document.getElementById('loginBtn').addEventListener('click', ()=>{
+        const human = document.getElementById('cb-human').checked;
+        if(!human){ alert('لطفاً تیک "من ربات نیستم" را بزنید.'); return; }
+        // ارسال واقعی: اینجا باید درخواست به بک‌اند زده شود تا احراز هویت انجام گردد.
+        alert('ورود نمایشی: اینجا باید فرم به سرور ارسال شود.');
+    });
+
+    document.getElementById('signupBtn').addEventListener('click', ()=>{
+        const human2 = document.getElementById('cb-human-sign').checked;
+        if(!human2){ alert('لطفاً تیک "من ربات نیستم" را بزنید.'); return; }
+        alert('ثبت‌نام نمایشی: اینجا باید فرم به سرور ارسال شود.');
+    });
+</script>
+</body>
+</html>

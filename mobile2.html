@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ورود — نسخه موبایل</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+            background: linear-gradient(180deg,#06b6d4,#7c3aed);background-size:200% 200%;animation:bgMobile 8s ease-in-out infinite}
+        @keyframes bgMobile{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+        .card{width:100%;max-width:420px;background:rgba(255,255,255,0.06);padding:18px;border-radius:12px;backdrop-filter:blur(6px);color:#fff}
+        .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+        .insta-logo{width:22px;height:22px;border-radius:6px;object-fit:contain}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#fff;margin-bottom:10px}
+        .btn{width:100%;padding:12px;border-radius:10px;border:0;background:#0ea5e9;color:#fff;font-weight:700}
+        .socials{display:flex;gap:8px;margin-top:10px}
+        .google-btn{flex:1;padding:10px;border-radius:10px;background:#fff;color:#111;font-weight:700;cursor:pointer}
+        .phone-btn{flex:1;padding:10px;border-radius:10px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.1);cursor:pointer}
+        .captcha{display:flex;align-items:center;gap:8px;margin:8px 0;color:#fff;font-weight:600}
+    </style>
+</head>
+<body>
+<div style="display:none" id="CONFIG_M"><span id="INSTAGRAM_LOGO_M">https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png</span></div>
+
+<section class="card" aria-label="ورود موبایل">
+    <div class="brand-row">
+        <img id="instaM" class="insta-logo" src="" alt="logo">
+        <div style="font-weight:800">ورود به حساب کاربری</div>
+    </div>
+
+    <input placeholder="ایمیل یا نام کاربری" type="email" id="m-email">
+    <input placeholder="رمز عبور" type="password" id="m-pass">
+
+    <div class="captcha"><input id="cb-human-m" type="checkbox"> من ربات نیستم</div>
+
+    <button id="m-login" class="btn">ورود</button>
+
+    <div class="socials">
+        <button id="m-google" class="google-btn">گوگل</button>
+        <a href="phone2.html" class="phone-btn" style="display:inline-flex;align-items:center;justify-content:center">شماره تلفن</a>
+    </div>
+
+    <p style="font-size:.9rem;margin-top:10px;color:rgba(255,255,255,0.9);text-align:center">نسخه موبایل — انیمیشن پس‌زمینه سبک</p>
+</section>
+
+<script>
+    document.getElementById('instaM').src = document.getElementById('INSTAGRAM_LOGO_M').textContent;
+    document.getElementById('m-google').addEventListener('click', ()=>{ alert('برای اتصال گوگل واقعی باید این دکمه به بک‌اند OAuth شما متصل شود.'); });
+    document.getElementById('m-login').addEventListener('click', ()=>{
+        if(!document.getElementById('cb-human-m').checked){ alert('لطفاً تیک "من ربات نیستم" را بزنید.'); return; }
+        alert('ورود موبایل (نمایشی). اینجا باید به سرور ارسال شود.');
+    });
+</script>
+</body>
+</html>

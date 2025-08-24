@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ورود — نسخه موبایل</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family:"Vazirmatn",Tahoma,Arial,sans-serif;
+            min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+            /* موبایل: انیمیشن بسیار ساده / کند برای مصرف کمتر */
+            background: linear-gradient(180deg,#06b6d4,#7c3aed);
+            background-size:200% 200%;
+            animation: bgMobile 8s ease-in-out infinite;
+        }
+        @keyframes bgMobile{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+
+        .card{width:100%;max-width:420px;background:rgba(255,255,255,0.06);padding:18px;border-radius:12px;backdrop-filter:blur(6px)}
+        h3{color:#fff;margin-bottom:8px;text-align:center}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(0,0,0,.12);margin-bottom:10px}
+        .btn{width:100%;padding:12px;border-radius:10px;border:0;background:#0ea5e9;color:#fff;font-weight:700}
+        .small{font-size:0.85rem;color:rgba(255,255,255,0.9);text-align:center;margin-top:10px}
+    </style>
+</head>
+<body>
+<section class="card" aria-label="ورود موبایل">
+    <h3>ورود به حساب</h3>
+    <input placeholder="ایمیل یا نام کاربری" type="email">
+    <input placeholder="رمز عبور" type="password">
+    <button class="btn">ورود</button>
+    <div class="small">نسخهٔ موبایل — انیمیشن پس‌زمینه ساده و کم‌هزینه</div>
+</section>
+</body>
+</html>

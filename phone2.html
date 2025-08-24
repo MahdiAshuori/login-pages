@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ورود با شماره تلفن</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+            background: linear-gradient(180deg,#06b6d4,#7c3aed);background-size:200% 200%;animation:bgPhone 10s ease-in-out infinite}
+        @keyframes bgPhone{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+        .card{width:100%;max-width:420px;background:rgba(255,255,255,0.06);padding:18px;border-radius:12px;backdrop-filter:blur(6px);color:#fff}
+        h3{text-align:center;margin-bottom:10px}
+        label{display:block;margin-bottom:6px}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#fff;margin-bottom:12px}
+        .btn{width:100%;padding:12px;border-radius:10px;border:0;background:#0ea5e9;color:#fff;font-weight:700}
+        .captcha{display:flex;align-items:center;gap:8px;margin:8px 0;color:#fff;font-weight:600}
+        .note{font-size:.9rem;color:rgba(255,255,255,0.9);margin-top:10px;text-align:center}
+    </style>
+</head>
+<body>
+<section class="card" aria-label="ورود با شماره تلفن">
+    <h3>ورود با شماره تلفن</h3>
+    <label for="phone">شماره تلفن (با پیش‌شماره)</label>
+    <input id="phone" type="tel" placeholder="مثلاً: +98 912 123 4567" inputmode="tel" pattern="[0-9+\s]+" />
+    <div class="captcha"><input id="cb-phone" type="checkbox"> من ربات نیستم</div>
+    <button id="sendSms" class="btn">ارسال کد تایید (SMS)</button>
+    <p class="note">پس از ارسال، به صفحهٔ وارد کردن کد هدایت می‌شوید. (این نمونه صرفاً نمایشی است)</p>
+</section>
+
+<script>
+    // اعتبارسنجی ساده و ارسال "نمونه" برای OTP
+    function validatePhone(p){
+        // ساده: بررسی وجود عدد و طول معقول
+        const cleaned = (p||'').replace(/[^\d+]/g,'').trim();
+        return cleaned.length >= 10;
+    }
+
+    document.getElementById('sendSms').addEventListener('click', ()=>{
+        const phone = document.getElementById('phone').value.trim();
+        if(!validatePhone(phone)){ alert('شمارهٔ معتبر وارد کنید.'); return; }
+        if(!document.getElementById('cb-phone').checked){ alert('لطفاً تیک "من ربات نیستم" را بزنید.'); return; }
+
+        // --- اینجا جای فراخوانی API سامانه پیامکی است ---
+        // نمونهٔ کامنتی برای توسعه‌دهنده (فرمتی نمونه):
+        /*
+          fetch('/api/send-sms', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ phone: phone })
+          }).then(r => r.json()).then(data => {
+            // بررسی موفقیت ارسال و سپس ریدایرکت به otp.html
+          });
+        */
+        // در حال حاضر ما فقط شماره را در sessionStorage ذخیره می‌کنیم و به صفحهٔ otp هدایت می‌کنیم:
+        sessionStorage.setItem('auth_phone', phone);
+        // اگر می‌خواهی کد نمونه هم بفرستیم (برای تست محلی) می‌توانیم آن را نیز ذخیره کنیم:
+        // sessionStorage.setItem('auth_otp', '123456'); // برای تست
+        window.location.href = 'otp2.html';
+    });
+</script>
+</body>
+</html>

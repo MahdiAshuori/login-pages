@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>تایید پیامکی</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+            background: linear-gradient(180deg,#7c3aed,#fb7185);background-size:200% 200%;animation:bgOtp 10s ease-in-out infinite}
+        @keyframes bgOtp{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+        .card{width:100%;max-width:420px;background:rgba(255,255,255,0.06);padding:18px;border-radius:12px;backdrop-filter:blur(6px);color:#fff}
+        h3{text-align:center;margin-bottom:10px}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#fff;margin-bottom:10px}
+        .btn{width:100%;padding:12px;border-radius:10px;border:0;background:#7c3aed;color:#fff;font-weight:700}
+        .small{font-size:.9rem;color:rgba(255,255,255,0.9);text-align:center;margin-top:10px}
+        .resend{margin-top:12px;text-align:center}
+        .resend button{background:transparent;border:1px solid rgba(255,255,255,0.12);color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+    </style>
+</head>
+<body>
+<section class="card" aria-label="تایید کد پیامکی">
+    <h3>وارد کردن کد پیامکی</h3>
+    <div id="phoneDisplay" style="text-align:center;margin-bottom:8px;color:rgba(255,255,255,0.9)"></div>
+    <input id="otpInput" placeholder="کد تایید (مثلاً ۶ رقمی)" inputmode="numeric" />
+    <button id="verifyBtn" class="btn">تایید کد</button>
+
+    <div class="resend">
+        <div class="small">کد را دریافت نکردید؟</div>
+        <button id="resendBtn">ارسال مجدد کد</button>
+    </div>
+
+    <div class="small" style="margin-top:12px">این نمونه صرفاً نمایشی است؛ برای اتصال واقعی از endpoint های سرور استفاده کنید.</div>
+</section>
+
+<script>
+    // نمایش شماره که از phone.html ذخیره شده
+    const phone = sessionStorage.getItem('auth_phone') || '';
+    if(!phone){
+        // اگر شماره موجود نبود، کاربر را به صفحهٔ شماره می‌بریم
+        window.location.href = 'phone2.html';
+    } else {
+        document.getElementById('phoneDisplay').textContent = 'کد به شمارهٔ: ' + phone + ' ارسال شد';
+    }
+
+    // ارسال درخواست تایید (نمونه)
+    document.getElementById('verifyBtn').addEventListener('click', ()=>{
+        const code = (document.getElementById('otpInput').value||'').trim();
+        if(code.length < 3){ alert('کد معتبر وارد کن'); return; }
+
+        // --- اینجا باید درخواست به سرور برای verify زده شود ---
+        /*
+        fetch('/api/verify-otp', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ phone: phone, code: code })
+        }).then(r=>r.json()).then(data=>{
+          if(data.success){ // ریدایرکت یا ست توکن
+            window.location.href = '/dashboard';
+          } else {
+            alert('کد اشتباه است');
+          }
+        });
+        */
+
+        // نمونهٔ نمایشی: قبول هر کدی و رفتن به صفحهٔ اصلی
+        alert('کد بررسی شد (نمایشی). در پیاده‌سازی واقعی باید سرور بررسی کند.');
+        // در حالت واقعی اینجا مثلاً توکن ذخیره می‌شود و کاربر وارد می‌شود:
+        // window.location.href = '/dashboard';
+    });
+
+    document.getElementById('resendBtn').addEventListener('click', ()=>{
+        // اینجا نیز باید endpoint ارسال مجدد فراخوانی شود
+        /*
+        fetch('/api/resend-otp', {...})
+        */
+        alert('در نسخهٔ واقعی: درخواست ارسال مجدد کد به سرور ارسال می‌شود.');
+    });
+</script>
+</body>
+</html>

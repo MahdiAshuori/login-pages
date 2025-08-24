@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ورود — نسخه تبلت</title>
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px;height:100%;
+            background: linear-gradient(120deg,#06b6d4,#7c3aed,#fb7185);background-size:300% 300%;animation:bgTab 14s linear infinite}
+        @keyframes bgTab{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .container{width:900px;max-width:100%;background:rgba(255,255,255,0.06);padding:20px;border-radius:14px;display:flex;gap:18px;align-items:flex-start;color:#fff}
+        .left{flex:1;padding:8px}
+        .right{width:320px;background:rgba(255,255,255,0.04);padding:12px;border-radius:12px}
+        .brand-row{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+        .insta-logo{width:26px;height:26px;object-fit:contain;border-radius:6px}
+        input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:#fff;margin-bottom:10px}
+        .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#7c3aed;color:#fff;border:0;cursor:pointer}
+        .social-row{display:flex;gap:10px;margin-top:10px}
+        .phone-btn{padding:10px;border-radius:10px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.1);cursor:pointer}
+        .captcha{display:flex;align-items:center;gap:8px;margin:8px 0;color:#fff;font-weight:600}
+        @media (max-width:720px){ .container{flex-direction:column} .right{width:100%} }
+    </style>
+</head>
+<body>
+<div style="display:none" id="CONFIG_T"><span id="INSTAGRAM_LOGO_T">https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png</span></div>
+
+<main class="container" aria-label="ورود تبلت">
+    <section class="left">
+        <div class="brand-row">
+            <img id="instaT" class="insta-logo" src="" alt="insta">
+            <div style="font-weight:800;font-size:1.15rem">ورود به حساب کاربری</div>
+        </div>
+
+        <input placeholder="ایمیل یا نام کاربری" id="t-email" type="email">
+        <input placeholder="رمز عبور" id="t-pass" type="password">
+
+        <div class="captcha"><input id="cb-human-t" type="checkbox"> من ربات نیستم</div>
+
+        <button id="t-login" class="btn">ورود</button>
+
+        <div class="social-row">
+            <button id="t-google" class="btn" style="background:#fff;color:#000">ورود با گوگل</button>
+            <a href="phone2.html" class="phone-btn">ورود با شماره تلفن</a>
+        </div>
+    </section>
+
+    <aside class="right">
+        <img src="https://i.postimg.cc/MKbS6f5G/14040331-0160478.jpg" style="width:100%;border-radius:10px;margin-bottom:10px" alt="">
+        <div style="color:#fff;font-size:0.95rem">نسخهٔ تبلت — انیمیشن متعادل</div>
+    </aside>
+</main>
+
+<script>
+    document.getElementById('instaT').src = document.getElementById('INSTAGRAM_LOGO_T').textContent;
+    document.getElementById('t-google').addEventListener('click', ()=>{ alert('برای گوگل واقعی، این دکمه باید به بک‌اند OAuth شما متصل شود.'); });
+    document.getElementById('t-login').addEventListener('click', ()=>{
+        if(!document.getElementById('cb-human-t').checked){ alert('لطفاً تیک "من ربات نیستم" را بزنید.'); return; }
+        alert('ورود نمایشی تبلت. اینجا باید درخواست به سرور برود.');
+    });
+</script>
+</body>
+</html>

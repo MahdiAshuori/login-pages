@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>هدایت به نسخهٔ مناسب</title>
+    <meta name="robots" content="noindex">
+    <style>
+        body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0f172a;color:#fff}
+        .box{text-align:center;padding:20px;border-radius:12px;background:rgba(255,255,255,0.06)}
+    </style>
+</head>
+<body>
+<div class="box">
+    <h2>انتقال به نسخهٔ مناسب...</h2>
+    <p id="info">در حال تشخیص اندازهٔ صفحه...</p>
+    <p style="font-size:0.85rem;color:#aab4d6">اگر انتقال خودکار رخ نداد، لینک‌ها پایین را بزنید:</p>
+    <p>
+        <a href="desktop1.html" style="color:#7dd3fc">نسخه دسکتاپ</a> —
+        <a href="tablet1.html" style="color:#86efac">نسخه تبلت</a> —
+        <a href="mobile1.html" style="color:#fca5a5">نسخه موبایل</a>
+    </p>
+</div>
+
+<script>
+    // دستورالعمل: بردارهای breakpoint را اینجا می‌توانی تنظیم کنی.
+    const w = Math.max(window.innerWidth || 0, document.documentElement.clientWidth || 0);
+    const info = document.getElementById('info');
+
+    // قواعد انتخاب: <520 موبایل، 520-1000 تبلت، >1000 دسکتاپ
+    if (w <= 520) {
+        info.textContent = 'نسخه موبایل انتخاب شد...';
+        location.replace('mobile1.html');
+    } else if (w <= 1000) {
+        info.textContent = 'نسخه تبلت انتخاب شد...';
+        location.replace('tablet1.html');
+    } else {
+        info.textContent = 'نسخه دسکتاپ انتخاب شد...';
+        location.replace('desktop1.html');
+    }
+</script>
+</body>
+</html>

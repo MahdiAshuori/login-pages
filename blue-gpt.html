@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ورود / ثبت‌نام — پنل</title>
+
+    <!-- فونت فارسی -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- آیکون‌ها -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* ===== پایه ===== */
+        :root{
+            --bg1: #0a0a0a;
+            --card-bg: rgba(255,255,255,0.04);
+            --accent1: #00d4ff;
+            --accent2: #0099cc;
+            --muted: #cbd5e1;
+            --glass: rgba(255,255,255,0.04);
+            --radius: 16px;
+        }
+
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family: 'Vazirmatn', system-ui, sans-serif;
+            background: linear-gradient(135deg, rgb(3, 51, 71) 0%, rgba(20,22,30,1) 60%);
+            color: #e6eef6;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            min-height:100vh;
+            padding:24px;
+        }
+
+        /* پس‌زمینه‌ی شعاعی ملایم برای عمق */
+        body::before{
+            content:"";
+            position:fixed;
+            inset:0;
+            background:
+                    radial-gradient(circle at 10% 20%, rgba(0,212,255,0.06), transparent 10%),
+                    radial-gradient(circle at 85% 80%, rgba(0,149,204,0.04), transparent 12%);
+            pointer-events:none;
+            z-index:0;
+        }
+
+        /* ===== کارت کلی ===== */
+        .auth-card{
+            position:relative;
+            width:100%;
+            max-width:1100px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border: 1px solid rgba(0, 213, 255, 0.3);
+            border-radius: calc(var(--radius));
+            overflow:hidden;
+            display:grid;
+            grid-template-columns: 420px 1fr; /* left visual / right forms */
+            gap: 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            z-index:1;
+        }
+
+        /* کارت برای موبایل ستون می‌شود */
+        @media (max-width: 880px){
+            .auth-card{ grid-template-columns: 1fr; max-width:720px; }
+        }
+
+        /* ===== ناحیه‌ی تصویری / سمت چپ ===== */
+        .visual{
+            padding: 36px 28px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.06), rgba(0,149,204,0.03));
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            min-height:320px;
+        }
+
+        .visual .logo{
+            width:140px;
+            height:140px;
+            border-radius:50%;
+            background: linear-gradient(135deg, var(--accent1), var(--accent2));
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:3.2rem;
+            box-shadow: 0 10px 40px rgba(0,212,255,0.25), inset 0 0 20px rgba(255,255,255,0.06);
+            position:relative;
+            overflow:hidden;
+            border: 4px solid rgba(255,255,255,0.06);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .visual h2{
+            margin:0;
+            font-size:1.6rem;
+            font-weight:700;
+            color:var(--muted);
+            line-height:1.1;
+            text-align:center;
+        }
+
+        .visual p{
+            margin:0;
+            color:rgba(230,238,246,0.9);
+            text-align:center;
+            font-size:0.95rem;
+            max-width:300px;
+        }
+
+        .visual .badges{
+            display:flex;
+            gap:10px;
+            margin-top:8px;
+        }
+
+        .visual .badge{
+            background:linear-gradient(90deg,var(--accent1),var(--accent2));
+            color:#fff;
+            padding:6px 12px;
+            border-radius:999px;
+            font-weight:600;
+            font-size:0.85rem;
+            box-shadow: 0 8px 18px rgba(0,212,255,0.12);
+        }
+
+        /* افکت انیمیشن داخلی لوگو */
+        .visual .logo::before{
+            content:"";
+            position:absolute;
+            inset:-30%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.08), transparent);
+            transform:rotate(0deg);
+            animation: rotate 8s linear infinite;
+        }
+        @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+        /* ===== ناحیه فرم‌ها ===== */
+        .forms{
+            padding:28px 36px;
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+            justify-content:center;
+        }
+
+        .tabs{
+            display:flex;
+            gap:8px;
+            align-items:center;
+            justify-content:flex-end;
+        }
+
+        .tab {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding:8px 14px;
+            font-weight:600;
+            cursor:pointer;
+            border-radius: 12px;
+            transition: all .25s;
+        }
+        .tab:focus{outline:2px dashed rgba(0,212,255,0.15)}
+        .tab.active{
+            background: linear-gradient(90deg, rgba(0,212,255,0.12), rgba(0,149,204,0.07));
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(0,212,255,0.06);
+            transform: translateY(-4px);
+        }
+
+        .form-card{
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+            border-radius: 12px;
+            padding: 18px;
+            border:1px solid rgba(255,255,255,0.02);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+            transition: all .35s;
+        }
+
+        .form-grid{ display:grid; gap:12px; }
+
+        label{ display:block; font-size:0.9rem; margin-bottom:6px; color:var(--muted); }
+        input[type="text"], input[type="email"], input[type="password"], input[type="tel"]{
+            width:100%;
+            padding:12px 14px;
+            border-radius:10px;
+            border:1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            color: #e6eef6;
+            font-size:1rem;
+            transition:box-shadow .2s, border-color .2s, transform .15s;
+        }
+        input::placeholder{ color: rgba(230,238,246,0.45) }
+        input:focus{
+            outline:none;
+            border-color: rgba(0,212,255,0.5);
+            box-shadow: 0 8px 30px rgba(0,212,255,0.06);
+            transform: translateY(-2px);
+        }
+
+        .row{
+            display:flex;
+            gap:12px;
+        }
+        .row .col{ flex:1 }
+
+        /* چشمک‌زن افکت دکمه */
+        .btn{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:10px;
+            padding:12px 18px;
+            border-radius:10px;
+            border:none;
+            cursor:pointer;
+            color:#022;
+            font-weight:700;
+            background: linear-gradient(90deg, var(--accent1), var(--accent2));
+            box-shadow: 0 12px 40px rgba(0,212,255,0.18);
+            transition: transform .18s, box-shadow .18s;
+        }
+        .btn:hover{ transform: translateY(-4px); box-shadow: 0 24px 60px rgba(0,212,255,0.24); }
+        .btn.secondary{
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: none;
+            font-weight:600;
+        }
+
+        /* لینکهای کمکی */
+        .form-foot{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            margin-top:6px;
+            font-size:0.92rem;
+            color:var(--muted);
+        }
+        .link{ color:var(--accent1); text-decoration:none; font-weight:600; }
+        .link:hover{ text-decoration:underline; color:var(--accent2) }
+
+        /* visibility toggle icon */
+        .pass-wrap{ position:relative; }
+        .pass-toggle{
+            position:absolute;
+            left:12px;
+            top:50%;
+            transform:translateY(-50%);
+            background:transparent;
+            border:none;
+            color:var(--muted);
+            cursor:pointer;
+            font-size:1rem;
+        }
+
+        /* small helpers */
+        .or-line{ text-align:center; color:rgba(230,238,246,0.45); font-size:0.9rem; margin:8px 0 }
+        .social-row{ display:flex; gap:8px; justify-content:center; margin-top:8px }
+        .social{
+            width:44px;height:44px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;
+            background: linear-gradient(90deg,var(--accent1),var(--accent2)); color:#022; font-weight:700;
+            box-shadow:0 10px 30px rgba(0,212,255,0.12);
+        }
+
+        /* خطاهای ساده */
+        .err{ color:#ffbaba; font-weight:600; font-size:0.9rem; display:none; margin-top:6px; }
+
+        /* responsive adjustments */
+        @media (max-width:520px){
+            .visual{ padding:24px; min-height:200px }
+            .visual h2{ font-size:1.2rem }
+            .auth-card{ border-radius:12px; }
+            .forms{ padding:18px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="auth-card" role="application" aria-label="فرم ورود و ثبت نام">
+    <!-- visual left -->
+    <div class="visual" aria-hidden="false">
+        <div class="logo" aria-hidden="true"><i class="fas fa-user-shield"></i></div>
+        <h2>خوش آمدید</h2>
+        <p>پنل ورود و ثبت‌نام حرفه‌ای</p>
+        <div class="badges" aria-hidden="true">
+            <span class="badge">امن</span>
+            <span class="badge">سریع</span>
+            <span class="badge">ریسپانسیو</span>
+        </div>
+    </div>
+
+    <!-- forms right -->
+    <div class="forms" role="region" aria-label="فرم‌ها">
+        <!-- tabs -->
+        <div class="tabs" role="tablist" aria-label="سوئیچ بین ورود و ثبت‌نام">
+            <button class="tab active" data-target="login" role="tab" aria-selected="true">ورود</button>
+            <button class="tab" data-target="register" role="tab" aria-selected="false">ثبت‌نام</button>
+        </div>
+
+        <!-- login form -->
+        <div class="form-card form-panel" id="login" data-visible="true" role="tabpanel">
+            <form id="loginForm" class="form-grid" autocomplete="on" novalidate>
+                <label for="loginEmail">ایمیل یا نام کاربری</label>
+                <input id="loginEmail" name="loginEmail" type="text" placeholder="ایمیل یا نام کاربری" required autocomplete="username">
+
+                <label for="loginPass">رمز عبور</label>
+                <div class="pass-wrap">
+                    <input id="loginPass" name="loginPass" type="password" placeholder="رمز خود را وارد کنید" required autocomplete="current-password">
+                    <button type="button" class="pass-toggle" aria-label="نمایش رمز" data-target="loginPass"><i class="fa-regular fa-eye"></i></button>
+                </div>
+
+                <div class="form-foot" style="margin-top:8px;">
+                    <label style="display:flex;align-items:center;gap:8px;">
+                        <input type="checkbox" name="remember" /> <span style="font-size:0.95rem;color:var(--muted)">مرا به خاطر بسپار</span>
+                    </label>
+                    <a href="#" class="link">فراموشی رمز؟</a>
+                </div>
+
+                <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+                    <button class="btn" type="submit" aria-label="ورود">ورود به حساب</button>
+                    <button type="button" class="btn secondary" id="toRegister">ثبت‌نام</button>
+                </div>
+
+                <div class="or-line">یا ورود با</div>
+                <div class="social-row" aria-hidden="true">
+                    <div class="social" title="ورود با گوگل"><i class="fab fa-google"></i></div>
+                    <div class="social" title="ورود با گیت‌هاب"><i class="fab fa-github"></i></div>
+                    <div class="social" title="ورود با لینکدین"><i class="fab fa-linkedin"></i></div>
+                </div>
+
+                <div class="err" id="loginErr">لطفاً فیلدهای الزامی را پر کنید.</div>
+            </form>
+        </div>
+
+        <!-- register form -->
+        <div class="form-card form-panel" id="register" data-visible="false" role="tabpanel" hidden>
+            <form id="regForm" class="form-grid" autocomplete="on" novalidate>
+                <label for="rFullname">نام و نام خانوادگی</label>
+                <input id="rFullname" name="rFullname" type="text" placeholder="مثلاً: سید مهدی آشوری" required autocomplete="name">
+
+                <label for="rEmail">ایمیل</label>
+                <input id="rEmail" name="rEmail" type="email" placeholder="example@mail.com" required autocomplete="email">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="rPass">رمز عبور</label>
+                        <div class="pass-wrap">
+                            <input id="rPass" name="rPass" type="password" placeholder="رمز قوی انتخاب کنید" minlength="8" required autocomplete="new-password">
+                            <button type="button" class="pass-toggle" aria-label="نمایش رمز" data-target="rPass"><i class="fa-regular fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="rPass2">تکرار رمز</label>
+                        <div class="pass-wrap">
+                            <input id="rPass2" name="rPass2" type="password" placeholder="رمز را دوباره وارد کنید" minlength="8" required autocomplete="new-password">
+                            <button type="button" class="pass-toggle" aria-label="نمایش رمز" data-target="rPass2"><i class="fa-regular fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <label for="rPhone">شماره موبایل (اختیاری)</label>
+                <input id="rPhone" name="rPhone" type="tel" placeholder="09xxxxxxxxx" autocomplete="tel">
+
+                <div style="display:flex; gap:10px; margin-top:8px;">
+                    <button class="btn" type="submit">ایجاد حساب</button>
+                    <button type="button" class="btn secondary" id="toLogin">بازگشت به ورود</button>
+                </div>
+
+                <div class="err" id="regErr">خطا: لطفاً فیلدها را بررسی کنید.</div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ===== تب‌ها (ورود ↔ ثبت‌نام) =====
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.form-panel');
+    function showPanel(name){
+        panels.forEach(p=>{
+            const id = p.id;
+            if(id === name){
+                p.hidden = false;
+                p.setAttribute('data-visible','true');
+            } else {
+                p.hidden = true;
+                p.setAttribute('data-visible','false');
+            }
+        });
+        tabs.forEach(t=>{
+            const active = t.dataset.target === name;
+            t.classList.toggle('active', active);
+            t.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+    }
+    tabs.forEach(t=>{
+        t.addEventListener('click', ()=> showPanel(t.dataset.target));
+    });
+    document.getElementById('toRegister').addEventListener('click', ()=> showPanel('register'));
+    document.getElementById('toLogin').addEventListener('click', ()=> showPanel('login'));
+
+    // ===== نمایش/مخفی کردن رمز =====
+    document.querySelectorAll('.pass-toggle').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+            const target = document.getElementById(btn.dataset.target);
+            if(!target) return;
+            if(target.type === 'password'){ target.type='text'; btn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>'; }
+            else { target.type='password'; btn.innerHTML = '<i class="fa-regular fa-eye"></i>'; }
+        });
+    });
+
+    // ===== اعتبارسنجی ساده فرم ورود =====
+    const loginForm = document.getElementById('loginForm');
+    const loginErr = document.getElementById('loginErr');
+    loginForm.addEventListener('submit', e=>{
+        e.preventDefault();
+        const email = loginForm.loginEmail.value.trim();
+        const pass = loginForm.loginPass.value.trim();
+        if(!email || !pass){
+            loginErr.style.display = 'block';
+            setTimeout(()=> loginErr.style.display='none', 3500);
+            return;
+        }
+        // اینجا می‌تونی با fetch/ajax به سرور ارسال کنی.
+        alert('ورود با موفقیت شبیه‌سازی شد.\n(در پروژه واقعی، اینجا درخواست به سرور ارسال می‌شود)');
+        loginForm.reset();
+    });
+
+    // ===== اعتبارسنجی ساده فرم ثبت‌نام =====
+    const regForm = document.getElementById('regForm');
+    const regErr = document.getElementById('regErr');
+    regForm.addEventListener('submit', e=>{
+        e.preventDefault();
+        const p1 = regForm.rPass.value;
+        const p2 = regForm.rPass2.value;
+        if(p1.length < 8){
+            regErr.textContent = 'رمز عبور باید حداقل ۸ کاراکتر باشد.';
+            regErr.style.display = 'block';
+            setTimeout(()=> regErr.style.display='none', 3500);
+            return;
+        }
+        if(p1 !== p2){
+            regErr.textContent = 'رمزها با هم مطابقت ندارند.';
+            regErr.style.display = 'block';
+            setTimeout(()=> regErr.style.display='none', 3500);
+            return;
+        }
+        // ارسال به سرور (مثال)
+        alert('ثبت‌نام شبیه‌سازی شد. (در پروژه واقعی، فرم به سرور فرستاده می‌شود)');
+        regForm.reset();
+        showPanel('login');
+    });
+
+    // ===== دسترسی کیبورد: تب‌ها با کلیدهای چپ/راست =====
+    document.addEventListener('keydown', (e)=>{
+        if(e.key === 'ArrowLeft' || e.key === 'ArrowRight'){
+            const activeIndex = Array.from(tabs).findIndex(t => t.classList.contains('active'));
+            let next = activeIndex;
+            if(e.key === 'ArrowLeft') next = Math.max(0, activeIndex-1);
+            if(e.key === 'ArrowRight') next = Math.min(tabs.length-1, activeIndex+1);
+            tabs[next].click();
+        }
+    });
+
+    // رویداد پیش‌فرض: نمایش لاگین
+    showPanel('login');
+
+</script>
+</body>
+</html>

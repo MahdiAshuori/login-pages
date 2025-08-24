@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ورود — نسخه دسکتاپ</title>
+    <style>
+        /* ====== کامنت‌ها به فارسی برای ویرایش راحت ====== */
+        /* ریست پایه */
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+            height:100%;
+            /* پس‌زمینهٔ چند رنگی پویا (دسکتاپ: انیمیشن کند و ظریف) */
+            background: linear-gradient(120deg,#0ea5e9,#7c3aed,#f97316);
+            background-size: 400% 400%;
+            animation: bgDesktop 22s ease infinite;
+            display:flex;align-items:center;justify-content:center;
+            padding:32px;
+            -webkit-font-smoothing:antialiased;
+        }
+        @keyframes bgDesktop{
+            0%{background-position:0% 50%}
+            50%{background-position:100% 50%}
+            100%{background-position:0% 50%}
+        }
+
+        /* افکت ذرات ملایم */
+        .dots{
+            position:fixed;inset:-40vmax;z-index:0;
+            background:
+                    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.06), transparent 30%),
+                    radial-gradient(circle at 80% 10%, rgba(255,255,255,0.04), transparent 35%);
+            filter:blur(3px);pointer-events:none;
+        }
+
+        /* کارت مرکزی */
+        .card{
+            position:relative;z-index:2;
+            width:980px;max-width:98%;
+            display:grid;grid-template-columns:1fr 420px;gap:28px;
+            background:rgba(255,255,255,0.08);backdrop-filter:blur(10px);
+            border-radius:18px;padding:28px;border:1px solid rgba(255,255,255,0.12);
+            box-shadow:0 18px 50px rgba(2,6,23,0.45);
+        }
+
+        /* بخش فرم (چپ) */
+        .form-side{
+            padding:18px 12px;display:flex;flex-direction:column;justify-content:center;
+        }
+        h1{color:#fff;margin-bottom:8px;font-size:1.6rem}
+        p.lead{color:rgba(255,255,255,0.85);margin-bottom:18px}
+
+        .tabs{display:flex;gap:10px;margin-bottom:14px}
+        .tab{flex:1;padding:10px;border-radius:10px;background:#fff;color:#0f172a;font-weight:700;cursor:pointer;border:0}
+        .tab[aria-selected="false"]{opacity:.85;transform:translateY(0)}
+
+        .field{margin-bottom:12px}
+        label{display:block;color:#071033;margin-bottom:6px;font-weight:600}
+        input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(10,18,38,.12);font-size:1rem}
+
+        .btn{width:100%;padding:12px;border-radius:12px;border:0;color:#fff;font-weight:800;background:linear-gradient(90deg,#0ea5e9,#7c3aed);cursor:pointer;margin-top:6px;box-shadow:0 10px 24px rgba(124,58,237,0.22)}
+
+        /* بخش تصویر/اطلاعات (راست) */
+        .visual{
+            padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            border-radius:12px;border:1px solid rgba(255,255,255,0.04);
+            display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+        }
+        .visual img{width:100%;height:auto;border-radius:10px;box-shadow:0 12px 26px rgba(2,6,23,0.45)}
+        .visual .small{color:rgba(255,255,255,0.9)}
+
+        /* دسترس‌پذیری: تمرکز */
+        input:focus{outline:3px solid rgba(59,130,246,0.14)}
+
+        /* واکنش‌گرایی برای مانیتورهای باریک‌تر */
+        @media (max-width:1100px){ .card{grid-template-columns:1fr 360px} }
+        @media (max-width:880px){
+            /* در حالت تبلت و موبایل کوچک‌تر این صفحه را معمولاً ریدایرکت می‌کنیم،
+               اما اگر کاربر مستقیم آمد، قالب عمودی می‌شود */
+            .card{grid-template-columns:1fr;max-width:720px}
+            .visual{order:2}
+        }
+    </style>
+</head>
+<body>
+<div class="dots" aria-hidden="true"></div>
+
+<main class="card" role="main" aria-label="ورود دسکتاپ">
+    <section class="form-side" aria-labelledby="title">
+        <h1 id="title">ورود به حساب کاربری</h1>
+        <p class="lead">خوش آمدید — ایمیل و رمز خود را وارد کنید یا ثبت‌نام نمایید.</p>
+
+        <div class="tabs" role="tablist">
+            <button class="tab" id="t1" aria-selected="true">ورود</button>
+            <button class="tab" id="t2" aria-selected="false">ثبت‌نام</button>
+        </div>
+
+        <div class="pane" id="pane-login">
+            <div class="field"><label for="d-email">ایمیل</label><input id="d-email" type="email" placeholder="you@example.com"></div>
+            <div class="field"><label for="d-pass">رمز عبور</label><input id="d-pass" type="password" placeholder="••••••••"></div>
+            <button class="btn">ورود</button>
+        </div>
+
+        <div class="pane" id="pane-signup" style="display:none">
+            <div class="field"><label for="d-name">نام کامل</label><input id="d-name" type="text" placeholder="نام شما"></div>
+            <div class="field"><label for="d-email2">ایمیل</label><input id="d-email2" type="email" placeholder="you@example.com"></div>
+            <div class="field"><label for="d-pass2">رمز عبور</label><input id="d-pass2" type="password" placeholder="رمز امن"></div>
+            <button class="btn">ثبت‌نام</button>
+        </div>
+    </section>
+
+    <aside class="visual" aria-hidden="false">
+        <img src="https://i.postimg.cc/MKbS6f5G/14040331-0160478.jpg" alt="تصویر نمایشی">
+        <div class="small">نسخهٔ دسکتاپ — انیمیشن پس‌زمینه آرام و پرجزئیات</div>
+    </aside>
+</main>
+
+<script>
+    // تب‌ها
+    const t1 = document.getElementById('t1'), t2 = document.getElementById('t2');
+    const pLogin = document.getElementById('pane-login'), pSignup = document.getElementById('pane-signup');
+    t1.addEventListener('click', ()=>{ t1.setAttribute('aria-selected','true'); t2.setAttribute('aria-selected','false'); pLogin.style.display='block'; pSignup.style.display='none' });
+    t2.addEventListener('click', ()=>{ t2.setAttribute('aria-selected','true'); t1.setAttribute('aria-selected','false'); pSignup.style.display='block'; pLogin.style.display='none' });
+</script>
+</body>
+</html>
